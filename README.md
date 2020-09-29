@@ -13,6 +13,16 @@ implement the secp256k1 elliptic curve:
 [`rust-secp256k1`]: https://github.com/rust-bitcoin/rust-secp256k1
 [`bitcoin-core/secp256k1`]: https://github.com/bitcoin-core/secp256k1
 
+## Initial results
+
+Benchmarks performed on a Intel(R) Xeon(R) E-2286M  CPU @ 2.40GHz with
+Turbo Boost disabled.
+
+Endomorphism optimizations were enabled for both the `k256` and
+`rust-secp256k1` crates.
+
+![bencmark results](https://raw.githubusercontent.com/tarcieri/rust-secp256k1-ecdsa-bench/main/img/rust-secp256k1-ecdsa.png)
+
 ## License
 
 Licensed under either of the following, at your option:

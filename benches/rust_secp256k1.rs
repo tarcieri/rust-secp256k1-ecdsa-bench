@@ -17,7 +17,7 @@ fn sign_ecdsa(c: &mut Criterion) {
     let msg = Message::from_slice(Sha256::digest(EXAMPLE_MSG).as_ref()).unwrap();
 
     c.bench_function("rust-secp256k1 ECDSA signer", move |b| {
-        b.iter(|| engine.sign(&msg, &secret_key))
+        b.iter(|| engine.sign_ecdsa(&msg, &secret_key))
     });
 }
 
@@ -26,11 +26,11 @@ fn verify_ecdsa(c: &mut Criterion) {
     let secret_key = SecretKey::from_slice(&EXAMPLE_KEY).unwrap();
     let public_key = PublicKey::from_secret_key(&engine, &secret_key);
     let msg = Message::from_slice(Sha256::digest(EXAMPLE_MSG).as_ref()).unwrap();
-    let signature = engine.sign(&msg, &secret_key);
+    let signature = engine.sign_ecdsa(&msg, &secret_key);
 
     c.bench_function("rust-secp256k1 ECDSA verifier", move |b| {
         b.iter(|| {
-            engine.verify(&msg, &signature, &public_key).unwrap();
+            engine.verify_ecdsa(&msg, &signature, &public_key).unwrap();
         })
     });
 }

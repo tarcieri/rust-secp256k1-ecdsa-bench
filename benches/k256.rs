@@ -15,8 +15,8 @@ const EXAMPLE_KEY: [u8; 32] = [
 const EXAMPLE_MSG: &[u8] = b"The Magic Words are Squeamish Ossifrage";
 
 fn sign_ecdsa(c: &mut Criterion) {
-    let signing_key = SigningKey::new(&EXAMPLE_KEY).unwrap();
-    let msg_digest = Sha256::new().chain(EXAMPLE_MSG);
+    let signing_key = SigningKey::from_bytes(&EXAMPLE_KEY).unwrap();
+    let msg_digest = Sha256::new_with_prefix(EXAMPLE_MSG);
 
     c.bench_function("k256 ECDSA signer", move |b| {
         b.iter(|| {
@@ -26,14 +26,14 @@ fn sign_ecdsa(c: &mut Criterion) {
 }
 
 fn verify_ecdsa(c: &mut Criterion) {
-    let signing_key = SigningKey::new(&EXAMPLE_KEY).unwrap();
-    let verify_key = signing_key.verify_key();
-    let msg_digest = Sha256::new().chain(EXAMPLE_MSG);
+    let signing_key = SigningKey::from_bytes(&EXAMPLE_KEY).unwrap();
+    let verifying_key = signing_key.verifying_key();
+    let msg_digest = Sha256::new_with_prefix(EXAMPLE_MSG);
     let signature: Signature = signing_key.sign_digest(msg_digest.clone());
 
     c.bench_function("k256 ECDSA verifier", move |b| {
         b.iter(|| {
-            verify_key
+            verifying_key
                 .verify_digest(msg_digest.clone(), &signature)
                 .unwrap();
         })
